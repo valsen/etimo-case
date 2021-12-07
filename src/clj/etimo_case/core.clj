@@ -10,7 +10,7 @@
    I have tried to keep each function as 'pure' as possible, i.e. with few or no side-effects.
 
    I have also tried to make it easy to add new user commands and behavior, by defining a command
-   as a pure map/dictionary that contains the command's handler function, the current inventory and
+   as a map that contains the command's handler function, the current inventory and
    any other data needed by the handler function.
   
    I've included test cases right in the function definitions,
@@ -18,8 +18,10 @@
    quickly get an understanding of what a function accomplishes, by looking
    at the inputs and outputs of the test cases right along the source code.
   
-   With clj cli/tools installed, you can run the program with 'clj -M:run',
-   and the test suite with 'clj -M:test'."
+   With clojure command line tools installed, you can run the program with 'clj -M:run',
+   and the test suite with 'clj -M:test'. You can also build an uberjar with:
+  'clojure -X:uberjar :jar EtimoCase.jar :main-class etimo-case.core' and run it with:
+  'java -cp EtimoCase.jar clojure.main -m etimo-case.core'."
   {:author "Victor Josephson"}
   (:require [clojure.test :refer [is]]))
 
