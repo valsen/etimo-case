@@ -32,7 +32,7 @@
   (str "The current inventory is: " (data/get-inventory)))
 
 (defn print-inventory-message
-  "Prints the inventory as a side-effect and returns the function's argument unmodified."
+  "Prints a message with the current inventory."
   [_]
   (println (get-inventory-message)))
 
