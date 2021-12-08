@@ -10,8 +10,7 @@
 (def command-pattern #"^([a-zA-Z]+)([\d]+)?$")
 
 (defn get-user-input
-  "Asks the user to enter a command. Stores the user's input with an :input key
-   in the supplied data map, which is then returned."
+  "Asks the user to enter a command. Returns the user's input as a string."
   []
   (print "Enter a command: ")
   (flush)
