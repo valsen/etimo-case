@@ -3,6 +3,8 @@
             [etimo-case.core]))
 
 (defn -main []
-  (let [{:keys [fail error]} (run-tests 'etimo-case.core)]
+  (let [{:keys [fail error]} (run-tests 'etimo-case.core
+                                        'etimo-case.data
+                                        'etimo-case.handlers)]
     (System/exit (if (zero? (+ fail error)) 0 1))))
 

@@ -20,26 +20,14 @@
   'clojure -X:uberjar :jar EtimoCase.jar :main-class etimo-case.core' and run it with:
   'java -cp EtimoCase.jar clojure.main -m etimo-case.core'."
   {:author "Victor Josephson"}
-  (:require [clojure.test :refer [is]]))
+  (:require [clojure.test :refer [is]]
+            [etimo-case.data :as data]
+            [etimo-case.handlers :as handlers]))
 
 ;; This regex pattern enforces a consistent syntax for user commands.
 ;; It matches strings beginning with one or more letters (representing an action),
 ;; optionally followed by one or more digits as a numerical argument.
 (def command-pattern #"^([a-zA-Z]+)([\d]+)?$")
-
-;; The inventory count is the only global, mutable state of the program.
-;; For this specific implementation (single-user console app),
-;; it would arguably be better to remove it from global state and just pass
-;; a value around between the functions to minimize/eliminate side-effects.
-;; But keeping it in global state makes sense for future multi-client support,
-;; e.g. if the program is made into a web app where the inventory state would be
-;; shared between all clients.
-(def inventory (atom 0))
-
-(defn set-inventory!
-  "Resets the state of the inventory atom to the value of new-inventory."
-  [new-inventory]
-  (reset! inventory new-inventory))
 
 (defn get-user-input
   "Asks the user to enter a command. Stores the user's input with an :input key
@@ -48,72 +36,6 @@
   (print "Enter a command: ")
   (flush)
   (read-line))
-
-(defn update-inventory!
-  "This function has the side-effect of applying function f to the
-   current value of the inventory atom and x. Throws exception on invalid updates."
-  {:test (fn []
-           ;; negative adjustment decreases inventory
-           (is (= (do
-                    (set-inventory! 10)
-                    (update-inventory! - 3))
-                  7))
-           ;; postitive adjustment increases inventory
-           (is (= (do
-                    (set-inventory! 0)
-                    (update-inventory! + 1))
-                  1))
-           ;; adjustment cannot be nil
-           (is (thrown? Exception (update-inventory! + nil)))
-           ;; adjustment cannot be 0
-           (is (thrown? Exception (do
-                                    (set-inventory! 1)
-                                    (update-inventory! - 0))))
-           ;; inventory cannot become negative.
-           (is (thrown? Exception (do
-                                    (set-inventory! 1)
-                                    (update-inventory! - 2)))))}
-  [f x]
-  (when (nil? x)
-    (throw (ex-info "The command's numerical argument cannot be nil." {})))
-  (when (identical? (f @inventory x) @inventory)
-    (throw (ex-info "The command has no effect on the inventory." {})))
-  (when (< (f @inventory x) 0)
-    (throw (ex-info "Inventory cannot be negative." {})))
-  (swap! inventory f x))
-
-(defn sell!
-  "Removes qty from inventory."
-  {:test (fn []
-           ;; tests a sequence of three calls to sell!
-           (set-inventory! 3)
-           (is (= (sell! {:qty 2}) 1))
-           (is (= (sell! {:qty 1}) 0))
-           (is (thrown? Exception (sell! {:qty 1}))))}
-  [{:keys [qty]}]
-  (update-inventory! - qty))
-
-(defn re-stock!
-  "Adds qty to inventory."
-  {:test (fn []
-           ;; tests a sequence of two calls to re-stock!
-           (set-inventory! 0)
-           (is (= (re-stock! {:qty 2}) 2))
-           (is (= (re-stock! {:qty 9}) 11)))}
-  [{:keys [qty]}]
-  (update-inventory! + qty))
-
-(defn get-inventory-message
-  "Returns a message containing the current inventory count.
-   For a web app, this could be used as the handler function
-   for the command 'L'."
-  []
-  (str "The current inventory is: " @inventory))
-
-(defn print-inventory-message
-  "Prints the inventory as a side-effect and returns the function's argument unmodified."
-  [_]
-  (println (get-inventory-message)))
 
 (defn parse-command
   "This function acts as a router for incoming commands. 
@@ -127,13 +49,13 @@
    As an example, I have added an 'exit' command to terminate the program."
   {:test (fn []
            (is (= (parse-command "S12")
-                  {:handler sell!
+                  {:handler handlers/sell!
                    :args {:qty 12}}))
            (is (= (parse-command "I3")
-                  {:handler re-stock!
+                  {:handler handlers/re-stock!
                    :args {:qty 3}}))
            (is (= (parse-command "L")
-                  {:handler print-inventory-message}))
+                  {:handler handlers/print-inventory-message}))
            ;; 'X' is not a valid command
            (is (thrown? Exception (parse-command "X1")))
            ;; The 'S' command must be uppercase
@@ -143,14 +65,14 @@
   [input]
   (let [[_ action qty] (re-find command-pattern input)]
     (condp = action
-      "I" {:handler re-stock!
+      "I" {:handler handlers/re-stock!
            :args {:qty (read-string qty)}}
-      "S" {:handler sell!
+      "S" {:handler handlers/sell!
            :args {:qty (read-string qty)}}
       "L" (if qty
             (throw (ex-info "Command 'L' does not take any argument." {}))
-            {:handler print-inventory-message})
-      "exit" {:handler (fn [_] (System/exit 0))}
+            {:handler handlers/print-inventory-message})
+      "exit" {:handler handlers/exit}
       ;; throw exception if no match
       (throw (ex-info "Command not recognized, please try again." {})))))
 
@@ -170,5 +92,6 @@
 (defn -main
   "The program's entrypoint."
   []
+  (data/set-inventory! 0)
   (console-loop))
 
