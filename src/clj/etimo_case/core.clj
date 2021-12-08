@@ -1,24 +1,4 @@
 (ns etimo-case.core
-  "This is a simple but extensible implementation of a console application
-   with the following functionality currently implemented:
-   1) The user can sell products with the command 'S' followed by a positive integer, e.g. 'S5'.
-   2) The user can re-stock products with the command 'I' followed by a positive integer, e.g. 'I3'.
-   3) The user can query the current inventory count with the command 'L'.
-
-   User commands are routed using the parse-command function, which is a pure function that
-   returns a map with :handler and :args keys for the given command.
-   New commands can be easily added to parse-command, and creating a new handler
-   is as simple as defining a function that takes a map as its only argument.
-
-   I've included test cases right in the function definitions,
-   between the docstring and function parameters. This way it's easy to
-   quickly get an understanding of what a function does, by looking
-   at the inputs and outputs of the test cases right along the source code.
-
-   With clojure command line tools installed, you can run the program with 'clj -M:run',
-   and the test suite with 'clj -M:test'. You can also build an uberjar with:
-  'clojure -X:uberjar :jar EtimoCase.jar :main-class etimo-case.core' and run it with:
-  'java -cp EtimoCase.jar clojure.main -m etimo-case.core'."
   {:author "Victor Josephson"}
   (:require [clojure.test :refer [is]]
             [etimo-case.data :as data]
