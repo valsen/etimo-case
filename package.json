@@ -1,0 +1,26 @@
+{
+  "name": "etimo-case",
+  "version": "1.0.0",
+  "description": "Etimo Case",
+  "main": "./index.js",
+  "type": "module",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valsen/etimo-case.git"
+  },
+  "keywords": [
+    "etimo"
+  ],
+  "author": "Victor Josephson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valsen/etimo-case/issues"
+  },
+  "homepage": "https://github.com/valsen/etimo-case#readme",
+  "bin": {
+    "hello": "./bin/index.js"
+  }
+}
