@@ -1,11 +1,9 @@
-import * as cli from "./lib/cli";
+import * as repl from "./lib/repl.js";
 
 const app = {};
 
 app.init = () => {
-    cli.init();
+    repl.init();
 }
 
 app.init();
-
-module.exports = app;

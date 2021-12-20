@@ -2,8 +2,8 @@
   "name": "etimo-case",
   "version": "1.0.0",
   "description": "Etimo Case",
-  "main": "./index.js",
   "type": "module",
+  "main": "./index.js",
   "scripts": {
     "test": "test"
   },
