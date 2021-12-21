@@ -2,10 +2,9 @@
   "name": "etimo-case",
   "version": "1.0.0",
   "description": "Etimo Case",
-  "type": "module",
   "main": "./index.js",
   "scripts": {
-    "test": "test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,5 +21,8 @@
   "homepage": "https://github.com/valsen/etimo-case#readme",
   "bin": {
     "hello": "./bin/index.js"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5"
   }
 }

@@ -1,4 +1,4 @@
-import * as repl from "./lib/repl.js";
+const repl = require("./lib/repl");
 
 const app = {};
 
