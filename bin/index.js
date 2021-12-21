@@ -1,4 +1,6 @@
-const repl = require("./lib/repl");
+#!/usr/bin/env node
+
+const repl = require("../lib/repl");
 
 const app = {};
 

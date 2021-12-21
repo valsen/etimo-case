@@ -2,7 +2,7 @@
   "name": "etimo-case",
   "version": "1.0.0",
   "description": "Etimo Case",
-  "main": "./index.js",
+  "main": "./bin/index.js",
   "scripts": {
     "test": "jest"
   },
@@ -15,12 +15,9 @@
   ],
   "author": "Victor Josephson",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/valsen/etimo-case/issues"
-  },
-  "homepage": "https://github.com/valsen/etimo-case#readme",
+  "homepage": "https://github.com/valsen/etimo-case/tree/nodejs#readme",
   "bin": {
-    "hello": "./bin/index.js"
+    "etimo-case": "./bin/index.js"
   },
   "devDependencies": {
     "jest": "^27.4.5"
